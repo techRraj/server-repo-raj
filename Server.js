@@ -42,7 +42,7 @@ const app = express();
 
 // ✅ Use CORS middleware
 app.use(cors({
-  origin: 'https://tech-rraj-client-repo.vercel.app/', // Allow frontend origin
+  origin: 'http://localhost:3000', // Allow frontend origin
   credentials: true, // Allow cookies if needed
 }));
 
