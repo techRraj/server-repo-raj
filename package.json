@@ -4,6 +4,7 @@
   "main": "Server.js",
   "type": "module",
   "scripts": {
+    "build":"tsc",
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
