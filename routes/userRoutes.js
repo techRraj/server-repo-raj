@@ -15,7 +15,6 @@
 
 // export default router;
 
-
 import express from 'express';
 import { registerUser, loginUser, userCredits, paymentRazorpay, verifyRazorpay } from '../controllers/userController.js';
 import authUser from '../middlewares/auth.js';
@@ -29,12 +28,12 @@ function asyncHandler(fn) {
 }
 
 // Public routes
-router.post('/register', asyncHandler(registerUser)); // Register a new user
-router.post('/login', asyncHandler(loginUser)); // Login an existing user
+router.post('/register', asyncHandler(registerUser));
+router.post('/login', asyncHandler(loginUser));
 
-// Protected routes (require authentication)
+// Protected routes
 router.get('/credits', authUser, asyncHandler(userCredits));
-router.post('/pay-razor', authUser, asyncHandler(paymentRazorpay)); // Initiate Razorpay payment
-router.post('/verify-razor', asyncHandler(verifyRazorpay)); // Verify Razorpay payment
+router.post('/pay-razor', authUser, asyncHandler(paymentRazorpay));
+router.post('/verify-razor', asyncHandler(verifyRazorpay));
 
 export default router;

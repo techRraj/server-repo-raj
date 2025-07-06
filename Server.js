@@ -34,37 +34,29 @@ import userRoutes from './routes/userRoutes.js';
 import imageRoutes from './routes/imageRoutes.js';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import cors from 'cors'; // ✅ Import cors
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
-// ✅ Use CORS middleware
-app.use(cors({
-  origin: 'https://tech-rraj-client-repo.vercel.app ', // Allow your Vercel frontend
-  credentials: true
-}));
-
-// Middleware to parse JSON requests
+// Middleware
 app.use(express.json());
 
-// Routes
+// CORS setup
+app.use(cors({
+  origin: 'https://tech-rraj-client-repo.vercel.app ',
+  credentials: true,
+}));
+
+// Route handlers
 app.use('/api/user', userRoutes);
 app.use('/api/image', imageRoutes);
 
+// Root route (optional)
 app.get('/', (req, res) => {
   res.send('API Working');
-});
-
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log("Database connected successfully"))
-  .catch((err) => console.error("Database connection failed:", err));
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server started on port: ${PORT}`);
 });
 
 // Error handler middleware
@@ -76,3 +68,15 @@ app.use((err, req, res, next) => {
     error: err.message,
   });
 });
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log("Database connected successfully");
+    app.listen(PORT, () => {
+      console.log(`Server started on port: ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("Database connection failed:", err);
+  });
