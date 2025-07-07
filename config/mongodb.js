@@ -1,15 +1,5 @@
 import mongoose from "mongoose";
 
-// const connectDB = async ()=>
-// {
-
-//     mongoose.connection.openUri('connected',()=>{
-//         console.log("Database connected succesfully")
-//     })
-//     await mongoose.connect(`${process.env.MONGODB_URI}/ImageGen`)
-// }
-
-// export default connectDB
 
 const connectDB = async () => {
     try {

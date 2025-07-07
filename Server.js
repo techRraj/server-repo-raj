@@ -54,6 +54,10 @@ app.use(cors({
 app.use('/api/user', userRoutes);
 app.use('/api/image', imageRoutes);
 
+app.get('/test', (req, res) => {
+  res.json({ success: true });
+});
+
 // Root route (optional)
 app.get('/', (req, res) => {
   res.send('API Working');

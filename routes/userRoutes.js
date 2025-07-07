@@ -29,7 +29,8 @@ function asyncHandler(fn) {
 
 // Public routes
 router.post('/register', asyncHandler(registerUser));
-router.post('/login', asyncHandler(loginUser));
+
+router.post('/login',asyncHandler(loginUser));
 
 // Protected routes
 router.get('/credits', authUser, asyncHandler(userCredits));
