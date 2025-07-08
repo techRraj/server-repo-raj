@@ -1,135 +1,86 @@
-import React, { useContext, useState } from "react";
-import axios from "axios";
-import { AppContext } from "../context/AppContext";
-import profile_icon from "../image/profile_icon.png";
-import locicon from "../image/lock_icon.svg";
-import email_icon from "../image/email_icon.svg";
-import cross_icon from "../image/cross_icon.svg";
+// import express from 'express';
+// import userRoutes from './routes/userRoutes.js';
+// import imageRoutes from './routes/imageRoutes.js';
+// import mongoose from 'mongoose';
+// import dotenv from 'dotenv';
 
-const Login = () => {
-  const [state, setState] = useState("Login");
-  const { setShowLogin, backendUrl, setToken, setUser } = useContext(AppContext);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+// dotenv.config();
 
-  const onSubmitHandler = async (e) => {
-    e.preventDefault();
+// const app = express();
 
-    try {
-      // Ensure no trailing or leading slashes in URL
-      const trimmedBackendUrl = backendUrl?.trim().replace(/\/+$/, "");
-      const url = state === "Login" ? "/api/user/login" : "/api/user/register";
-      const fullUrl = `${trimmedBackendUrl}${url}`;
+// // Middleware to parse JSON requests
+// app.use(express.json());
 
-      console.log("Sending request to:", fullUrl); // Debugging
+// // Routes
+// app.use('/api/user', userRoutes);
+// app.use('/api/image', imageRoutes);
+// app.get('/', (req, res) => {
+//   res.send('API Working')
+// });
 
-      const payload =
-        state === "Login"
-          ? { email, password }
-          : { name, email, password };
+// // Connect to MongoDB
+// mongoose.connect(process.env.MONGODB_URI)
+//   .then(() => console.log("Database connected successfully"))
+//   .catch((err) => console.error("Database connection failed:", err));
 
-      const { data } = await axios.post(fullUrl, payload);
+// const PORT = process.env.PORT || 5000;
+// app.listen(PORT, () => {
+//   console.log(`Server started on port: ${PORT}`);
+// });
 
-      if (data.success) {
-        setToken(data.token);
-        setUser(data.user);
-        localStorage.setItem("token", data.token);
-        setShowLogin(false);
-        alert(data.message || "Success!");
-      } else {
-        alert(data.message || "Something went wrong");
-      }
-    } catch (error) {
-      console.error("Auth error:", error);
-      let errorMessage = "Network error. Try again.";
 
-      if (error.response) {
-        // Server responded with a status code outside 2xx
-        errorMessage = error.response.data.message || error.response.statusText;
-      } else if (error.request) {
-        // No response received
-        errorMessage = "Request failed. Please check your internet connection.";
-      } else {
-        // Something went wrong while setting up the request
-        errorMessage = error.message;
-      }
+import express from 'express';
+import userRoutes from './routes/userRoutes.js';
+import imageRoutes from './routes/imageRoutes.js';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import cors from 'cors';
 
-      alert(errorMessage);
-    }
-  };
+dotenv.config();
 
-  return (
-    <div className="login-container">
-      <form onSubmit={onSubmitHandler} className="login-form">
-        <h1 className="login-lg">{state}</h1>
-        <p className="login-txt">Welcome back! Please sign in to continue</p>
+const app = express();
+const PORT = process.env.PORT || 5000;
 
-        {state !== "Login" && (
-          <div className="login-name">
-            <img src={profile_icon} alt="Profile" width={20} />
-            <input
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-              type="text"
-              placeholder="Full Name"
-              required
-            />
-          </div>
-        )}
+// Middleware
+app.use(express.json());
 
-        <div className="login-email">
-          <img src={email_icon} alt="Email" />
-          <input
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            type="email"
-            placeholder="Email Id"
-            required
-          />
-        </div>
+// CORS setup
+app.use(cors({
+  origin: 'https://tech-rraj-client-repo.vercel.app ',
+  credentials: true,
+}));
 
-        <div className="login-psw">
-          <img src={locicon} alt="Lock" />
-          <input
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            type="password"
-            placeholder="Password"
-            required
-          />
-        </div>
+// Route handlers
+app.use('/api/user', userRoutes);
+app.use('/api/image', imageRoutes);
 
-        <p className="login-forget">Forgot password?</p>
-        <button className="login-create" type="submit">
-          {state === "Login" ? "Login" : "Create Account"}
-        </button>
+app.get('/test', (req, res) => {
+  res.json({ success: true });
+});
 
-        {state === "Login" ? (
-          <p className="login-reg">
-            Don’t have an account?{" "}
-            <span className="login-yellow" onClick={() => setState("Sign Up")}>
-              Sign up
-            </span>
-          </p>
-        ) : (
-          <p className="login-already">
-            Already have an account?{" "}
-            <span className="login-yellow" onClick={() => setState("Login")}>
-              Login
-            </span>
-          </p>
-        )}
+// Root route (optional)
+app.get('/', (req, res) => {
+  res.send('API Working');
+});
 
-        <img
-          onClick={() => setShowLogin(false)}
-          src={cross_icon}
-          alt="Close"
-          className="login-cancel"
-        />
-      </form>
-    </div>
-  );
-};
+// Error handler middleware
+app.use((err, req, res, next) => {
+  console.error("Unhandled error:", err);
+  res.status(500).json({
+    success: false,
+    message: "Something went wrong on the server.",
+    error: err.message,
+  });
+});
 
-export default Login;
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log("Database connected successfully");
+    app.listen(PORT, () => {
+      console.log(`Server started on port: ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("Database connection failed:", err);
+  });
