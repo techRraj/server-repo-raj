@@ -36,5 +36,7 @@ router.post('/login',asyncHandler(loginUser));
 router.get('/credits', authUser, asyncHandler(userCredits));
 router.post('/pay-razor', authUser, asyncHandler(paymentRazorpay));
 router.post('/verify-razor', asyncHandler(verifyRazorpay));
-
+app.get('/test', (req, res) => {
+  res.json({ success: true });
+});
 export default router;
