@@ -73,7 +73,11 @@ app.use((err, req, res, next) => {
 });
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI, {
+  dbName: "ImageGen",
+  serverSelectionTimeoutMS: 15000, // Increase timeout
+  socketTimeoutMS: 45000,
+})
   .then(() => {
     console.log("Database connected successfully");
     app.listen(PORT, () => {
@@ -81,5 +85,6 @@ mongoose.connect(process.env.MONGODB_URI)
     });
   })
   .catch((err) => {
-    console.error("Database connection failed:", err);
+    console.error("Database connection failed:", err.message);
+    process.exit(1); // Exit process with failure
   });
