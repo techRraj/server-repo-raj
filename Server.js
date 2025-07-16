@@ -54,8 +54,8 @@ app.get('/test', (req, res) => {
 });
 
 // Route handlers
-app.use('/api/user', userRoutes);
-app.use('/api/image', imageRoutes);
+app.use('/routes/user', userRoutes);
+app.use('/routes/image', imageRoutes);
 
 // Root route
 app.get('/', (req, res) => {
