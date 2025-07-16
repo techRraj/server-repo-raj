@@ -28,7 +28,6 @@
 //   console.log(`Server started on port: ${PORT}`);
 // });
 
-
 import express from 'express';
 import userRoutes from './routes/userRoutes.js';
 import imageRoutes from './routes/imageRoutes.js';
@@ -37,7 +36,6 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 
 dotenv.config();
-
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -50,22 +48,23 @@ app.use(cors({
   credentials: true,
 }));
 
-// Route handlers
-app.use('/api/user', userRoutes);
-app.use('/api/image', imageRoutes);
-
+// Test route (should be here, not in routes)
 app.get('/test', (req, res) => {
   res.json({ success: true });
 });
 
-// Root route (optional)
+// Route handlers
+app.use('/api/user', userRoutes);
+app.use('/api/image', imageRoutes);
+
+// Root route
 app.get('/', (req, res) => {
   res.send('API Working');
 });
 
 // Error handler middleware
 app.use((err, req, res, next) => {
-  console.error("Unhandled error:", err);
+  console.error("Unhandled error:", err.message);
   res.status(500).json({
     success: false,
     message: "Something went wrong on the server.",

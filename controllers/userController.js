@@ -96,7 +96,9 @@ const userCredits = async (req, res) => {
       return res.status(404).json({ success: false, message: "User not found" });
     }
 
-    res.status(200).json({ success: true, credits: user.creditBalance, user });
+    res.status(200).json({ 
+      success: true,
+       credits: user.creditBalance, user });
   } catch (error) {
     console.error("Credits Error:", error.message);
     res.status(500).json({ success: false, message: "Failed to load user data" });

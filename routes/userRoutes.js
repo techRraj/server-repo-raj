@@ -23,20 +23,16 @@ const router = express.Router();
 
 // Utility middleware to handle async errors
 function asyncHandler(fn) {
-  return (req, res, next) =>
-    Promise.resolve(fn(req, res, next)).catch(next);
+  return (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 }
 
 // Public routes
 router.post('/register', asyncHandler(registerUser));
-
-router.post('/login',asyncHandler(loginUser));
+router.post('/login', asyncHandler(loginUser));
 
 // Protected routes
 router.get('/credits', authUser, asyncHandler(userCredits));
 router.post('/pay-razor', authUser, asyncHandler(paymentRazorpay));
 router.post('/verify-razor', asyncHandler(verifyRazorpay));
-app.get('/test', (req, res) => {
-  res.json({ success: true });
-});
+
 export default router;
