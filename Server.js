@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import userRoutes from './routes/userRoutes.js';
-import imageRoutes from  './routes/imageRoutes';
+import imageRoutes from  './routes/imageRoutes.js';
 // Load environment variables
 dotenv.config();
 
