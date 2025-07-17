@@ -40,7 +40,7 @@ res.status(200).json({
   token,
   user: {
     name: user.name,
-    creditBalance: user.creditBalance // ✅ Include creditBalance
+    creditBalance: user.creditBalance || 5 // ✅ Include creditBalance
   }
 });
   } catch (error) {
@@ -77,7 +77,7 @@ res.status(200).json({
   token,
   user: {
     name: user.name,
-    creditBalance: user.creditBalance // ✅ Include creditBalance
+    creditBalance: user.creditBalance || 5 // ✅ Include creditBalance
   }
 });
   } catch (error) {
