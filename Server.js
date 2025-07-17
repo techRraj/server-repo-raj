@@ -1,10 +1,9 @@
 import express from 'express';
-
+import userRoutes from './routes/userRoutes.js';  // ✅ Add .js
+import imageRoutes from './routes/imageRoutes.js'; // ✅ Add .js
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import userRoutes from './routes/userRoutes.js';
-import imageRoutes from  './routes/imageRoutes.js';
 // Load environment variables
 dotenv.config();
 
