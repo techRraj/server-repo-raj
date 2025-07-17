@@ -1,33 +1,3 @@
-// import express from 'express';
-// import userRoutes from './routes/userRoutes.js';
-// import imageRoutes from './routes/imageRoutes.js';
-// import mongoose from 'mongoose';
-// import dotenv from 'dotenv';
-
-// dotenv.config();
-
-// const app = express();
-
-// // Middleware to parse JSON requests
-// app.use(express.json());
-
-// // Routes
-// app.use('/api/user', userRoutes);
-// app.use('/api/image', imageRoutes);
-// app.get('/', (req, res) => {
-//   res.send('API Working')
-// });
-
-// // Connect to MongoDB
-// mongoose.connect(process.env.MONGODB_URI)
-//   .then(() => console.log("Database connected successfully"))
-//   .catch((err) => console.error("Database connection failed:", err));
-
-// const PORT = process.env.PORT || 5000;
-// app.listen(PORT, () => {
-//   console.log(`Server started on port: ${PORT}`);
-// });
-
 import express from 'express';
 import userRoutes from './routes/userRoutes.js';
 import imageRoutes from './routes/imageRoutes.js';
@@ -35,27 +5,29 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 
+// Load environment variables
 dotenv.config();
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(express.json());
 
-// CORS setup
+// ✅ Fix: Remove trailing space in origin URL
 app.use(cors({
   origin: 'https://tech-rraj-client-repo.vercel.app ',
   credentials: true,
 }));
 
-// Test route (should be here, not in routes)
+// ✅ Fix: Use correct route prefix (should be /api/user, not /routes/user)
+app.use('/api/user', userRoutes);
+app.use('/api/image', imageRoutes);
+
+// Test route to verify server is running
 app.get('/test', (req, res) => {
   res.json({ success: true });
 });
-
-// Route handlers
-app.use('/routes/user', userRoutes);
-app.use('/routes/image', imageRoutes);
 
 // Root route
 app.get('/', (req, res) => {
@@ -72,19 +44,31 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-  dbName: "ImageGen",
-  serverSelectionTimeoutMS: 15000, // Increase timeout
-  socketTimeoutMS: 45000,
-})
-  .then(() => {
+// MongoDB connection retry logic
+let retry = 0;
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI, {
+      dbName: "ImageGen",
+      serverSelectionTimeoutMS: 15000,
+      socketTimeoutMS: 45000,
+    });
+
     console.log("Database connected successfully");
     app.listen(PORT, () => {
       console.log(`Server started on port: ${PORT}`);
     });
-  })
-  .catch((err) => {
-    console.error("Database connection failed:", err.message);
-    process.exit(1); // Exit process with failure
-  });
+  } catch (err) {
+    console.error("MongoDB connection failed:", err.message);
+    if (retry < 5) {
+      console.log(`Retrying connection... Attempt ${retry + 1}`);
+      retry++;
+      setTimeout(connectDB, 5000);
+    } else {
+      console.error("Failed to connect after several attempts.");
+      process.exit(1);
+    }
+  }
+};
+
+connectDB();

@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "main": "Server.js",
   "type": "module",
-  "engines": {
-    "node": "20.18.0"
-  },
+  
   "scripts": {
-    "start": "node Server.js",
+    "start": "node --experimental-specifier-resolution=node Server.js",
     "dev": "nodemon Server.js",
     "build": "npm rebuild bcrypt"
+  },
+  "engines": {
+    "node": "20.18.0"
   },
   
   "author": "",

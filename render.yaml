@@ -3,13 +3,13 @@ services:
     name: image-gen-server
     env: node
     buildCommand: npm install --force
-    startCommand: node Server.js
+    startCommand: node --experimental-specifier-resolution=node Server.js
     envVars:
-      - key: PORT
-        value: "5000"
       - key: MONGODB_URI
         fromSecret: MONGODB_URI
       - key: JWT_SECRET
         fromSecret: JWT_SECRET
+      - key: PORT
+        value: "5000"
       - key: NODE_ENV
         value: "production"
