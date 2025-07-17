@@ -16,7 +16,7 @@ app.use(express.json());
 
 // ✅ Fix: Remove trailing space in origin URL
 app.use(cors({
-  origin: 'https://tech-rraj-client-repo.vercel.app ',
+origin: 'https://tech-rraj-client-repo.vercel.app ', // ✅ No trailing space
   credentials: true,
 }));
 
