@@ -7,4 +7,4 @@ const imageRouter = express.Router()
 
 imageRouter.post('/generate-image', authUser, generateImage)
 
-export default router
+export default router;
