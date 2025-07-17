@@ -1,29 +1,28 @@
 import express from 'express';
-import userRoutes from './routes/userRoutes.js';  // ✅ Add .js
-import imageRoutes from './routes/imageRoutes.js'; // ✅ Add .js
+import userRoutes from './routes/userRoutes.js';
+import imageRoutes from './routes/imageRoutes.js';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
-// Load environment variables
-dotenv.config();
 
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(express.json());
 
-// ✅ Fix: Remove trailing space in origin URL
+// CORS setup
 app.use(cors({
-origin: 'https://tech-rraj-client-repo.vercel.app ', // ✅ No trailing space
+  origin: 'https://tech-rraj-client-repo.vercel.app ', // ✅ No trailing space
   credentials: true,
 }));
 
-// ✅ Fix: Use correct route prefix (should be /api/user, not /routes/user)
+// Routes
 app.use('/api/user', userRoutes);
 app.use('/api/image', imageRoutes);
 
-// Test route to verify server is running
+// Test route
 app.get('/test', (req, res) => {
   res.json({ success: true });
 });
@@ -33,7 +32,7 @@ app.get('/', (req, res) => {
   res.send('API Working');
 });
 
-// Error handler middleware
+// Error handler
 app.use((err, req, res, next) => {
   console.error("Unhandled error:", err.message);
   res.status(500).json({
@@ -43,7 +42,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-// MongoDB connection retry logic
+// MongoDB connection with retry
 let retry = 0;
 const connectDB = async () => {
   try {
@@ -54,7 +53,8 @@ const connectDB = async () => {
     });
 
     console.log("Database connected successfully");
-    app.listen(PORT, () => {
+
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server started on port: ${PORT}`);
     });
   } catch (err) {
