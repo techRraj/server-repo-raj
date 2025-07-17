@@ -40,7 +40,7 @@ res.status(200).json({
   token,
   user: {
     name: user.name,
-    creditBalance: user.creditBalance || 5 // ✅ Include creditBalance
+    creditBalance: user.creditBalance
   }
 });
   } catch (error) {
@@ -77,7 +77,7 @@ res.status(200).json({
   token,
   user: {
     name: user.name,
-    creditBalance: user.creditBalance || 5 // ✅ Include creditBalance
+    creditBalance: user.creditBalance 
   }
 });
   } catch (error) {
@@ -98,7 +98,8 @@ const userCredits = async (req, res) => {
 
     res.status(200).json({ 
       success: true,
-       credits: user.creditBalance, user });
+       credits: user.creditBalance, 
+       user });
   } catch (error) {
     console.error("Credits Error:", error.message);
     res.status(500).json({ success: false, message: "Failed to load user data" });

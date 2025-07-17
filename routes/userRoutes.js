@@ -21,10 +21,7 @@ import authUser from '../middlewares/auth.js';
 
 const router = express.Router();
 
-// Utility middleware to handle async errors
-function asyncHandler(fn) {
-  return (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
-}
+
 
 // Public routes
 router.post('/register', asyncHandler(registerUser));
