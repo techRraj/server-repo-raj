@@ -14,10 +14,8 @@ app.use(express.json());
 
 // CORS setup
 app.use(cors({
-  origin: 'https://tech-rraj-client-repo.vercel.app ',
+  origin: ' https://tech-rraj-client-repo.vercel.app ',
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Routes
@@ -29,20 +27,18 @@ app.get('/test', (req, res) => {
   res.json({ success: true });
 });
 
-// Root route
-app.get('/', (req, res) => {
-  res.send('API Working');
-});
-
 // MongoDB connection
-await mongoose.connect(process.env.MONGODB_URI, {
-  dbName: "ImageGen",
-  serverSelectionTimeoutMS: 15000,
-  socketTimeoutMS: 45000,
-});
-
-console.log("Database connected successfully");
-
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server started on port: ${PORT}`);
-});
+try {
+  await mongoose.connect(process.env.MONGODB_URI, {
+    dbName: "ImageGen",
+    serverSelectionTimeoutMS: 15000,
+    socketTimeoutMS: 45000,
+  });
+  console.log("Database connected successfully");
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server started on port: ${PORT}`);
+  });
+} catch (err) {
+  console.error("MongoDB connection failed:", err.message);
+  process.exit(1);
+}
