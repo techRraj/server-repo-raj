@@ -3,13 +3,17 @@ services:
     name: image-gen-server
     env: node
     buildCommand: npm install --force
-    startCommand: node --experimental-specifier-resolution=node Server.js
+    startCommand: node Server.js
     envVars:
-      - key: PORT
-        value: "5000"
       - key: MONGODB_URI
         fromSecret: MONGODB_URI
       - key: JWT_SECRET
         fromSecret: JWT_SECRET
+      - key: PORT
+        value: "5000"
       - key: NODE_ENV
         value: "production"
+      - key: RAZORPAY_KEY_ID
+        fromSecret: RAZORPAY_KEY_ID
+      - key: RAZORPAY_KEY_SECRET
+        fromSecret: RAZORPAY_KEY_SECRET
