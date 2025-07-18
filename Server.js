@@ -14,7 +14,7 @@ app.use(express.json());
 
 // CORS setup
 app.use(cors({
-  origin: 'https://tech-rraj-client-repo-xwx8.vercel.app ', // ✅ Updated origin
+  origin: 'https://tech-rraj-client-repo.vercel.app ', // ✅ Updated origin
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'token'],
