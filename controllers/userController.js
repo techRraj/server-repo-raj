@@ -1,9 +1,15 @@
+import userModel from '../models/userModel.js';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import validator from 'validator';
 import razorpay from 'razorpay';
+import transactionModel from '../models/transactionModel.js';
 
-const razorpayInstance = new razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
+// Initialize Razorpay
+// const razorpayInstance = new razorpay({
+//   key_id: process.env.RAZORPAY_KEY_ID,
+//   key_secret: process.env.RAZORPAY_KEY_SECRET,
+// });
 
 // Register User
 const registerUser = async (req, res) => {
@@ -40,9 +46,10 @@ const registerUser = async (req, res) => {
       token,
       user: {
         name: user.name,
-        creditBalance: user.creditBalance || 5 // Ensure creditBalance is included
+        creditBalance: user.creditBalance || 5
       }
     });
+
   } catch (error) {
     console.error("Register Error:", error.message);
     res.status(500).json({ success: false, message: "An unexpected error occurred" });
@@ -77,9 +84,10 @@ const loginUser = async (req, res) => {
       token,
       user: {
         name: user.name,
-        creditBalance: user.creditBalance || 5 // Ensure creditBalance is included
+        creditBalance: user.creditBalance || 5
       }
     });
+
   } catch (error) {
     console.error("Login Error:", error.message);
     res.status(500).json({ success: false, message: "An unexpected error occurred" });
@@ -101,6 +109,7 @@ const userCredits = async (req, res) => {
       credits: user.creditBalance,
       user
     });
+
   } catch (error) {
     console.error("Credits Error:", error.message);
     res.status(500).json({ success: false, message: "Failed to load user data" });
@@ -161,6 +170,7 @@ const paymentRazorpay = async (req, res) => {
       }
       res.status(200).json({ success: true, order });
     });
+
   } catch (error) {
     console.error("Payment Initiation Error:", error.message);
     res.status(500).json({ success: false, message: "An unexpected error occurred" });
@@ -198,10 +208,10 @@ const verifyRazorpay = async (req, res) => {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
 
-    // Verify the signature
+    // Verify signature
     const crypto = require('crypto');
     const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET);
-    hmac.update(`${orderInfo.id}|${razorpay_payment_id}`);
+    hmac.update(`${razorpay_order_id}|${razorpay_payment_id}`);
     const generatedSignature = hmac.digest('hex');
 
     if (generatedSignature !== razorpay_signature) {
@@ -223,6 +233,7 @@ const verifyRazorpay = async (req, res) => {
     );
 
     res.status(200).json({ success: true, message: "Credits Added" });
+
   } catch (error) {
     console.error("Payment Verification Error:", error.message);
     res.status(500).json({ success: false, message: "An unexpected error occurred" });
