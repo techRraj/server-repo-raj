@@ -12,6 +12,7 @@ import transactionModel from '../models/transactionModel.js';
 // });
 
 // Register User
+
 const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -46,7 +47,7 @@ const registerUser = async (req, res) => {
       token,
       user: {
         name: user.name,
-        creditBalance: user.creditBalance || 5
+        creditBalance: user.creditBalance // ✅ Send 5 credits
       }
     });
 
