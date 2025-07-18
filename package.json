@@ -4,8 +4,7 @@
   "type": "module",
   "main": "Server.js",
   "scripts": {
-    "start": "node --experimental-specifier-resolution=node Server.js",
-    "dev": "nodemon --experimental-specifier-resolution=node Server.js"
+    "start": "node --experimental-specifier-resolution=node Server.js"
   },
   "engines": {
     "node": "20.18.0"
