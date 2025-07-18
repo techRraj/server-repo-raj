@@ -85,7 +85,7 @@ const loginUser = async (req, res) => {
       token,
       user: {
         name: user.name,
-        creditBalance: user.creditBalance || 5
+        creditBalance: user.creditBalance
       }
     });
 
