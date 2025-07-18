@@ -30,6 +30,15 @@ app.get('/test', (req, res) => {
   res.json({ success: true });
 });
 
+// Error handler middleware
+app.use((err, req, res, next) => {
+  console.error("Unhandled error:", err);
+  res.status(500).json({
+    success: false,
+    message: "Something went wrong on the server.",
+    error: err.message,
+  });
+});
 // MongoDB connection
 try {
   await mongoose.connect(process.env.MONGODB_URI, {
